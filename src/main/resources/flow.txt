@@ -1,0 +1,20 @@
+documentation:
+    fb9kZFwNkyv1KrmgjEKXs0QZMZB6N4aM
+    https://apilayer.com/marketplace/fixer-api?live_demo=show
+    https://apilayer.com/marketplace/fixer-api#documentation-tab
+
+expected:
+    run main -> shows window ->
+        loads default symbols (USD, EUR, GBP, CHF, JPY, CAD, CNY, RUB, MXN, KRW)
+            CHECK -> if this fails due to limit of apikey then
+                asks usr for an API key specifying the source (https://www.exchangerate-api.com/)
+                try again process
+        prepares data for the app tu run
+            basic frame -> option list, input panel, confirmation button, result panel
+
+    window is remade -> shows UI with left selection box (updates ui for each selection):
+        exchange by Currency Code (from Currency.Code to Currency.Code of Money.Value) [default]
+        import a Currency (insert Currency Code to be imported)
+        history of a currency (select by Code, respecting to a list of Code, multiple selection or select all)
+    then shows response in a frame below
+
