@@ -9,7 +9,7 @@ import java.util.List;
 public class Histogram implements Iterable<ExchangeRate>{
 
 
-    private final ArrayList<ExchangeRate> histogram;
+    private final List<ExchangeRate> histogram;
 
     public Histogram(List<ExchangeRate> compared){
         this.histogram = new ArrayList<>();

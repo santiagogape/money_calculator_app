@@ -44,6 +44,18 @@ public class Main {
         return new GsonJsonCurrenciesDeserializer().deserializer(json);
     }
 
+    public static Histogram readHistogram(String file) {
+        String json;
+        try {
+            json = Files.readString(Path.of(PATH+file));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new GsonBuilder()
+                .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
+                .create().fromJson(json, Histogram.class);
+    }
+
     public static void main(String[] args) {
         //load from api, read from past response
         List<Currency> currencies = readCurrencies(); //loadCurrencies();
@@ -51,7 +63,14 @@ public class Main {
         reference.add(currencies);
         reference.setVisible(List.of("USD", "EUR", "GBP", "CHF", "JPY", "CAD", "CNY", "RUB", "MXN", "KRW"));
         //write(reference,PATH+"reference.json");
-        loading(reference);
+        Histogram today = readHistogram("today.json"); //loading(reference);
+        Histogram month = readHistogram("month.json");
+
+        Currency base = base(reference);
+        List<Currency> to = currenciesToCompare(reference, base );
+
+
+
     }
 
     private static void write(Object reference, String path) {
@@ -68,12 +87,12 @@ public class Main {
     }
 
     private static void loading(CurrencyReference reference) {
-        Histogram dailyRates = loadRates(reference, base(reference), currencies(reference));
+        Histogram dailyRates = loadRates(reference, base(reference), currenciesToCompare(reference,  base(reference)));
         System.out.println(dailyRates);
 
         Histogram historic = loadHistoric(reference,
                 base(reference),
-                currencies(reference),
+                currenciesToCompare(reference, base(reference) ),
                 ZonedDateTime.now().minusMonths(1),
                 ZonedDateTime.now());
         System.out.println(historic);
@@ -86,9 +105,9 @@ public class Main {
         return reference.get("EUR");
     }
 
-    private static List<Currency> currencies(CurrencyReference reference) {
+    private static List<Currency> currenciesToCompare(CurrencyReference reference, Currency excluded) {
         Set<String> codes = new HashSet<>(Set.of("USD", "EUR", "GBP", "CHF", "JPY", "CAD", "CNY", "RUB", "MXN", "KRW"));
-        codes.remove("EUR"); // exclude base
+        codes.remove(excluded.code()); // exclude base
         List<Currency> currencies = new ArrayList<>();
         codes.forEach(c -> currencies.add(reference.get(c)));
         return currencies;
