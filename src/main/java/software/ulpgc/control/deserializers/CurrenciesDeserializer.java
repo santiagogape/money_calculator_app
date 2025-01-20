@@ -4,6 +4,7 @@ import software.ulpgc.model.Currency;
 
 import java.util.List;
 
+@FunctionalInterface
 public interface CurrenciesDeserializer {
-    List<Currency> deserializer(String json);
+    List<Currency> deserialize(String json);
 }

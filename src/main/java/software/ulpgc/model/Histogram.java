@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Histogram implements Iterable<ExchangeRate>{
 
@@ -19,6 +20,10 @@ public class Histogram implements Iterable<ExchangeRate>{
 
     private Comparator<? super ExchangeRate> sorter() {
         return Comparator.comparing(ExchangeRate::date).thenComparing(ExchangeRate::to);
+    }
+
+    public Stream<ExchangeRate> stream(){
+        return histogram.stream();
     }
 
 

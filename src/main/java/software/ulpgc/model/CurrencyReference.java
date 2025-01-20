@@ -22,12 +22,16 @@ public class CurrencyReference {
         currencies.forEach(this::add);
     }
 
-    public Map<String, Currency> allCurrencies() {
-        return currencies;
+    public List<Currency> allCurrencies() {
+        return currencies.values().stream().sorted().toList();
     }
 
-    public Map<String, Currency> currencies() {
-        return filtered;
+    public List<Currency> currencies() {
+        return filtered.values().stream().sorted().toList();
+    }
+
+    public List<Currency> exclude(Currency option){
+        return currencies().stream().filter(o -> !o.equals(option)).toList();
     }
 
     public Currency get(String key) {
@@ -46,7 +50,7 @@ public class CurrencyReference {
         filtered.putIfAbsent(code, currencies.get(code));
     }
 
-    public static String symbolsOf(List<Currency> to) {
+    public static String codesOf(List<Currency> to) {
         return to.stream().map(Currency::code).collect(Collectors.joining(","));
     }
 }

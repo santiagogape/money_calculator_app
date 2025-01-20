@@ -7,7 +7,7 @@ import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.net.URIBuilder;
-import software.ulpgc.control.deserializers.ExchangeRateDeserializer;
+import software.ulpgc.control.deserializers.ExchangeRatesDeserializer;
 import software.ulpgc.control.loaders.HistoricExchangeRateLoader;
 import software.ulpgc.model.API;
 import software.ulpgc.model.Currency;
@@ -20,14 +20,14 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static software.ulpgc.model.CurrencyReference.symbolsOf;
+import static software.ulpgc.model.CurrencyReference.codesOf;
 
 public class HttpClientHistoricExchangeRatesLoader implements HistoricExchangeRateLoader {
 
-    private final ExchangeRateDeserializer deserializer;
+    private final ExchangeRatesDeserializer deserializer;
     private final API api;
 
-    public HttpClientHistoricExchangeRatesLoader(API api, ExchangeRateDeserializer deserializer) {
+    public HttpClientHistoricExchangeRatesLoader(API api, ExchangeRatesDeserializer deserializer) {
         this.api = api;
         this.deserializer = deserializer;
     }
@@ -59,6 +59,7 @@ public class HttpClientHistoricExchangeRatesLoader implements HistoricExchangeRa
         }
     }
 
+
     private URI urlFor(Currency from, List<Currency> to, ZonedDateTime since, ZonedDateTime until) throws URISyntaxException {
         return new URIBuilder()
                 .setScheme(api.scheme())
@@ -79,7 +80,7 @@ public class HttpClientHistoricExchangeRatesLoader implements HistoricExchangeRa
                 .addParameter(api.endpoints().
                         get(API.EndPointName.historic)
                         .parameters()
-                        .get(API.Parameter.to), symbolsOf(to))
+                        .get(API.Parameter.to), codesOf(to))
                 .build();
     }
 

@@ -14,7 +14,7 @@ public class GsonJsonCurrenciesDeserializer implements CurrenciesDeserializer {
 
 
     @Override
-    public List<Currency> deserializer(String json) {
+    public List<Currency> deserialize(String json) {
         SymbolsResponse response = new GsonBuilder()
                 .create()
                 .fromJson(json, SymbolsResponse.class);

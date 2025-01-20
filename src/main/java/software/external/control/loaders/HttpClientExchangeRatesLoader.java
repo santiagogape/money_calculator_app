@@ -7,7 +7,7 @@ import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.net.URIBuilder;
-import software.ulpgc.control.deserializers.ExchangeRateDeserializer;
+import software.ulpgc.control.deserializers.ExchangeRatesDeserializer;
 import software.ulpgc.control.loaders.ExchangeRateLoader;
 import software.ulpgc.model.API;
 import software.ulpgc.model.Currency;
@@ -18,15 +18,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import static software.ulpgc.model.CurrencyReference.symbolsOf;
+import static software.ulpgc.model.CurrencyReference.codesOf;
 
 public class HttpClientExchangeRatesLoader implements ExchangeRateLoader {
 
 
-    private final ExchangeRateDeserializer deserializer;
+    private final ExchangeRatesDeserializer deserializer;
     private final API api;
 
-    public HttpClientExchangeRatesLoader(API api, ExchangeRateDeserializer deserializer) {
+    public HttpClientExchangeRatesLoader(API api, ExchangeRatesDeserializer deserializer) {
         this.api = api;
         this.deserializer = deserializer;
     }
@@ -56,6 +56,7 @@ public class HttpClientExchangeRatesLoader implements ExchangeRateLoader {
         }
     }
 
+
     private URI urlFor(Currency from, List<Currency> to) throws URISyntaxException {
         return new URIBuilder()
                 .setScheme(api.scheme())
@@ -68,7 +69,7 @@ public class HttpClientExchangeRatesLoader implements ExchangeRateLoader {
                 .addParameter(api.endpoints()
                         .get(API.EndPointName.rates)
                         .parameters()
-                        .get(API.Parameter.to), symbolsOf(to))
+                        .get(API.Parameter.to), codesOf(to))
                 .build();
     }
 
